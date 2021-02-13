@@ -51,6 +51,7 @@ export default {
         res.data.map(item => {
           item.isOperated = false;
           this.items.unshift(item);
+          console.log(res);
         });
       })
       .catch(err => {
@@ -60,6 +61,7 @@ export default {
       .get(`${URL}/maxId`)
       .then(res => {
         id += res.data.maxid;
+        console.log(res);
       })
       .catch(err => {
         console.error(err);
@@ -91,10 +93,8 @@ export default {
         center: true,
       })
         .then(() => {
-          const delItemData = { id: item.id };
-          console.log(delItemData);
           axios
-            .delete(`${URL}/todo`, delItemData)
+            .delete(`${URL}/todo`, { params: { id: item.id } })
             .then(res => {
               console.log(res);
             })
@@ -109,7 +109,6 @@ export default {
           });
         })
         .catch(() => {
-          console.log(item.id);
           this.$message({
             type: "info",
             message: "已取消删除",
@@ -131,9 +130,27 @@ export default {
     },
     checkItem(item) {
       item.isChecked = !item.isChecked;
+      const checkData = { id: item.id, isChecked: item.isChecked };
+      axios
+        .patch(`${URL}/todoChecked`, checkData)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     changeItem(item, newText) {
       item.text = newText;
+      const checkData = { id: item.id, newText: item.text };
+      axios
+        .patch(`${URL}/todoText`, checkData)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
   },
 };
