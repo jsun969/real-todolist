@@ -4,19 +4,19 @@
       <div id="item-text">
         <span :class="{ ckecked_item: isChecked }">{{ txt }}</span>
       </div>
-      <div id="tools">
+      <div id="tools" v-if="!doShowMore">
         <div id="edit-input" v-if="doEditText">
           <el-input v-model="editInput">
             <el-button slot="append" icon="el-icon-check" @click="editCompleted"></el-button>
             <el-button slot="append" icon="el-icon-close" @click="editCancel"></el-button>
           </el-input>
         </div>
-        <div id="operate" v-if="!showMore && !doEditText">
+        <div id="operate" v-if="!doEditText">
           <el-button icon="el-icon-more" circle @click="showOperation" v-if="!doShowMoreOperations" style="margin-left:auto"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle v-if="doShowMoreOperations" @click="$emit('delete-item')"></el-button>
-          <el-button type="primary" icon="el-icon-edit" circle v-if="doShowMoreOperations" @click="editText"></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle v-if="doShowMoreOperations" @click="doEditText = true"></el-button>
           <el-button type="warning" icon="el-icon-s-check" circle v-if="doShowMoreOperations" @click="$emit('check-item')"></el-button>
-          <el-button type="info" icon="el-icon-close" circle v-if="doShowMoreOperations" @click="hindOperation"></el-button>
+          <el-button type="info" icon="el-icon-close" circle v-if="doShowMoreOperations" @click="hideOperation"></el-button>
         </div>
       </div>
     </el-card>
@@ -28,7 +28,7 @@ export default {
   name: "ItemCard",
   props: {
     txt: String,
-    showMore: Boolean,
+    doShowMore: Boolean,
     isChecked: Boolean,
   },
   data() {
@@ -43,12 +43,9 @@ export default {
       this.doShowMoreOperations = true;
       this.$emit("show-more-item");
     },
-    hindOperation() {
+    hideOperation() {
       this.doShowMoreOperations = false;
-      this.$emit("hind-more-item");
-    },
-    editText() {
-      this.doEditText = true;
+      this.$emit("hide-more-item");
     },
     editCompleted() {
       this.doEditText = false;

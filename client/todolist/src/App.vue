@@ -11,11 +11,11 @@
         <li v-for="item in items" :key="item.id">
           <ItemCard
             :txt="item.text"
-            :showMore="item.isOperated"
+            :doShowMore="item.isOperated"
             :isChecked="item.isChecked"
             @delete-item="deleteItem(item)"
-            @show-more-item="hindMore(item)"
-            @hind-more-item="showMore"
+            @show-more-item="hideMore(item)"
+            @hide-more-item="showMore"
             @check-item="checkItem(item)"
             @edit-completed="changeItem(item, $event)"
           />
@@ -72,6 +72,7 @@ export default {
       if (this.itemText != "") {
         let itemTmpData = { id: id++, text: this.itemText, isOperated: this.isOperating, isChecked: false };
         this.items.unshift(itemTmpData);
+        console.log(itemTmpData.isOperated);
         delete itemTmpData.isOperated;
         console.log(itemTmpData);
         axios
@@ -115,7 +116,7 @@ export default {
           });
         });
     },
-    hindMore(item) {
+    hideMore(item) {
       this.isOperating = true;
       this.items.map(function(allitem) {
         allitem.isOperated = true;
