@@ -4,7 +4,7 @@
       <div id="item-text">
         <span :class="{ ckecked_item: isChecked }">{{ txt }}</span>
       </div>
-      <div id="tools" v-if="!doShowMore">
+      <div id="tools" v-if="operatingItemId === id || operatingItemId === -1">
         <div id="edit-input" v-if="doEditText">
           <el-input v-model="editInput">
             <el-button slot="append" icon="el-icon-check" @click="editCompleted"></el-button>
@@ -28,8 +28,9 @@ export default {
   name: "ItemCard",
   props: {
     txt: String,
-    doShowMore: Boolean,
+    id: Number,
     isChecked: Boolean,
+    operatingItemId: Number,
   },
   data() {
     return {

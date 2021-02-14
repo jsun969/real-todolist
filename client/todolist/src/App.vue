@@ -11,11 +11,12 @@
         <li v-for="item in items" :key="item.id">
           <ItemCard
             :txt="item.text"
-            :doShowMore="item.isOperated"
+            :id="item.id"
             :isChecked="item.isChecked"
+            :operatingItemId="operatingItemId"
             @delete-item="deleteItem(item)"
-            @show-more-item="hideMore(item)"
-            @hide-more-item="showMore"
+            @show-more-item="operatingItemId = item.id"
+            @hide-more-item="operatingItemId = -1"
             @check-item="checkItem(item)"
             @edit-completed="changeItem(item, $event)"
           />
@@ -41,7 +42,7 @@ export default {
     return {
       itemText: "",
       items: [],
-      isOperating: false,
+      operatingItemId: -1,
     };
   },
   created() {
@@ -49,7 +50,6 @@ export default {
       .get(`${URL}/todos`)
       .then(res => {
         res.data.map(item => {
-          item.isOperated = false;
           this.items.unshift(item);
           console.log(res);
         });
@@ -70,11 +70,8 @@ export default {
   methods: {
     addItem() {
       if (this.itemText != "") {
-        let itemTmpData = { id: id++, text: this.itemText, isOperated: this.isOperating, isChecked: false };
+        let itemTmpData = { id: id++, text: this.itemText, isChecked: false };
         this.items.unshift(itemTmpData);
-        console.log(itemTmpData.isOperated);
-        delete itemTmpData.isOperated;
-        console.log(itemTmpData);
         axios
           .post(`${URL}/todo`, itemTmpData)
           .then(res => {
@@ -116,19 +113,19 @@ export default {
           });
         });
     },
-    hideMore(item) {
-      this.isOperating = true;
-      this.items.map(function(allitem) {
-        allitem.isOperated = true;
-      });
-      item.isOperated = false;
-    },
-    showMore() {
-      this.isOperating = false;
-      this.items.map(function(allitem) {
-        allitem.isOperated = false;
-      });
-    },
+    // hideMore(item) {
+    //   this.isOperating = true;
+    //   this.items.map(function(allitem) {
+    //     allitem.isOperated = true;
+    //   });
+    //   item.isOperated = false;
+    // },
+    // showMore() {
+    //   this.isOperating = false;
+    //   this.items.map(function(allitem) {
+    //     allitem.isOperated = false;
+    //   });
+    // },
     checkItem(item) {
       item.isChecked = !item.isChecked;
       const checkData = { id: item.id, isChecked: item.isChecked };
