@@ -100,7 +100,7 @@ export default {
               console.error(err);
             });
           this.items.splice(this.items.indexOf(item), 1);
-          this.showMore();
+          this.operatingItemId = -1;
           this.$message({
             type: "success",
             message: "删除成功!",
@@ -113,19 +113,6 @@ export default {
           });
         });
     },
-    // hideMore(item) {
-    //   this.isOperating = true;
-    //   this.items.map(function(allitem) {
-    //     allitem.isOperated = true;
-    //   });
-    //   item.isOperated = false;
-    // },
-    // showMore() {
-    //   this.isOperating = false;
-    //   this.items.map(function(allitem) {
-    //     allitem.isOperated = false;
-    //   });
-    // },
     checkItem(item) {
       item.isChecked = !item.isChecked;
       const checkData = { id: item.id, isChecked: item.isChecked };

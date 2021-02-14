@@ -39,7 +39,6 @@ app.post("/todo", async (req, res) => {
 app.delete("/todo", async (req, res) => {
   try {
     const deleteID = { id: Number(req.query.id) };
-    console.log(deleteID);
     const result = await collection.deleteOne(deleteID);
     if (result.deletedCount === 1) {
       res.sendStatus(204);
